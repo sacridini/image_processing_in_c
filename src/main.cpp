@@ -4,10 +4,15 @@
 int main(int argc, char** argv) {
   Image test("stats.png");
   
-  // grayscale test
+  // grayscale avg test
   Image gray_avg = test;
   gray_avg.grayscale_avg();
   gray_avg.write("gray_avg.png");
+
+  // grayscale lum test
+  Image gray_lum = test;
+  gray_lum.grayscale_lum();
+  gray_lum.write("gray_lum.png");
 
 
   // test.write("stats_copy.png");
