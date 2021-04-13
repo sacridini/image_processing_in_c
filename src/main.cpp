@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Image.h"
 
 int main(int argc, char** argv) {
@@ -13,6 +12,10 @@ int main(int argc, char** argv) {
   Image gray_lum = test;
   gray_lum.grayscale_lum();
   gray_lum.write("gray_lum.png");
+
+  // Color Mask
+  test.colorMask(0,0,1); // Mask red and green bands
+  test.write("blue.png"); // Save a blue image :)
 
 
   // test.write("stats_copy.png");

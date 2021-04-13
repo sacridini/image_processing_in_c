@@ -1,5 +1,5 @@
-#include <cstdio>
-#include <cstdint>
+#include <stdio.h>
+#include <stdint.h>
 
 enum ImageType {
   PNG, JPG, BMP, TGA
@@ -24,4 +24,6 @@ struct Image {
 
   Image& grayscale_avg();
   Image& grayscale_lum();
+  
+  Image& colorMask(float r, float g, float b);
 };

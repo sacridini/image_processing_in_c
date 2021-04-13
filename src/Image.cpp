@@ -82,14 +82,15 @@ Image& Image::grayscale_avg() {
   }
   return *this;
 }
-
-Image& Image::grayscale_lum() {
+ 
+Image& Image::colorMask(float r, float g, float b) {
   if (channels < 3) {
-	printf("Image %p has less than 3 channels, it is assumed to already be grayscale.", this);
+	printf("\e[31m[ERROR] Color mask requires at least 3 channels, but this image has %d channels\e[0m\n", channels);
   } else {
-	for(int i = 0; i < size; i +=channels) {
-	  int gray = 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
-	  memset(data+i, gray, 3);
+	for (int i = 0; i < size; i+=channels) {
+	  data[i]	*= r; 
+	  data[i+1] *= g; 
+	  data[i+2] *= b; 
 	}
   }
   return *this;
