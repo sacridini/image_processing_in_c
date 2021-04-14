@@ -5,6 +5,8 @@
 
 #include "Image.h"
 
+#define BYTE_BOUND(value) value < 0 ? 0 : (value > 255 ? 255 : value) 
+
 Image::Image(const char* filename) {
   if (read(filename)) {
 	printf("read %s\n", filename);
@@ -70,6 +72,20 @@ ImageType Image::getFileType(const char* filename) {
  return PNG;
 }
 
+Image& Image::diffmap(Image& img) {
+  int compare_width = fmin(w, img.w);
+  int compare_height = fmin(h, img.h);
+  int compare_channels = fmin(channels, img.channels);
+  for (uint32_t i = 0; i < compare_width; ++i) {
+	for (uint32_t j = 0; j < compare_height; ++j) {
+	  for (uint8_t k = 0; k < compare_channels; ++k) {
+		data[(i*w+j)*channels+k] = BYTE_BOUND(abs(data[(i*w+j)*channels+k] - img.data[(i*img.w+j)*img.channels+k]));	
+	  }
+	}
+  }
+  return *this;
+}
+
 Image& Image::grayscale_avg() {
   // (r+g+b)/3
   if (channels < 3) {
@@ -82,7 +98,19 @@ Image& Image::grayscale_avg() {
   }
   return *this;
 }
- 
+
+Image& Image::grayscale_lum() {
+  if (channels < 3) {
+	printf("Image %p has less than 3 channels, it is assumed to already be grayscale.", this);
+  } else {
+	for(int i = 0; i < size; i +=channels) {
+	  int gray = 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
+	  memset(data+i, gray, 3);
+	}
+  }
+  return *this;
+ }
+
 Image& Image::colorMask(float r, float g, float b) {
   if (channels < 3) {
 	printf("\e[31m[ERROR] Color mask requires at least 3 channels, but this image has %d channels\e[0m\n", channels);

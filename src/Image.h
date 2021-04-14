@@ -22,6 +22,8 @@ struct Image {
 
   ImageType getFileType(const char* filename);
 
+  Image& diffmap(Image& img);
+
   Image& grayscale_avg();
   Image& grayscale_lum();
   
