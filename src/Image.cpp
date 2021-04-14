@@ -129,6 +129,36 @@ Image& Image::std_convolve_clamp_to_border(uint8_t channel, uint32_t ker_w, uint
   return *this;
 }
 
+Image& Image::std_convolve_cyclic(uint8_t channel, uint32_t ker_w, uint32_t ker_h, double ker[], uint32_t cr, uint32_t cc) {
+ uint8_t new_data[w*h];
+ uint64_t center = cr * ker_w + cc;
+ for (uint64_t k = channel; k < size; k += channels) {
+  double c = 0;
+  for (long i = -((long)cr); i < (long)ker_h-cr; ++i) {
+	long row = ((long)k/channels)/w-i;
+	if (row < 0) {
+	  row = row%h + h;
+	} else if (row > h - 1) {
+	  row %= h;
+	}
+	for (long j = -((long)cc); j < (long)ker_w-cc; ++j) {
+	  long col = ((long)k/channels)%w-j;
+	  if (col < 0) {
+		col = col%w + w;
+	  } else if (col > w - 1) {
+		col %= w;
+	  }
+	  c += ker[center+i*(long)ker_w+j]*data[(row*w+col)*channels+channel];
+	}
+  }
+  new_data[k/channels] = (uint8_t)BYTE_BOUND(round(c));
+  }
+  for (uint64_t k = channel; k < size; k += channels) {
+	data[k] = new_data[k/channels];
+  }
+  return *this;
+}
+
 Image& Image::diffmap(Image& img) {
   int compare_width = fmin(w, img.w);
   int compare_height = fmin(h, img.h);
