@@ -86,6 +86,26 @@ Image& Image::diffmap(Image& img) {
   return *this;
 }
 
+Image& Image::diffmap_scale(Image& img, uint8_t scl) {
+  int compare_width = fmin(w, img.w);
+  int compare_height = fmin(h, img.h);
+  int compare_channels = fmin(channels, img.channels);
+  uint8_t largest = 0;
+  for (uint32_t i = 0; i < compare_width; ++i) {
+	for (uint32_t j = 0; j < compare_height; ++j) {
+	  for (uint8_t k = 0; k < compare_channels; ++k) {
+		data[(i*w+j)*channels+k] = BYTE_BOUND(abs(data[(i*w+j)*channels+k] - img.data[(i*img.w+j)*img.channels+k]));	
+		largest = fmax(largest, data[(i*w+j)*channels+k]);
+	  }
+	}
+  }
+  scl = 255/fmax(1, fmax(scl, largest));
+  for (int i = 0; i < size; ++i) {
+	data[i] *= scl;
+  }
+  return *this;
+}
+
 Image& Image::grayscale_avg() {
   // (r+g+b)/3
   if (channels < 3) {
