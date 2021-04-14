@@ -17,8 +17,12 @@ int main(int argc, char** argv) {
   test.colorMask(0,0,1); // Mask red and green bands
   test.write("blue.png"); // Save a blue image :)
 
-
-  // test.write("stats_copy.png");
+  // Diffmap example
+  // Image test1("imgs/test1.png");
+  // Image test2("imgs/test2.png");
+  // Image diff = test1;
+  // diff.diffmap(test2);
+  // diff.write("image/diff.png");
   
   // Image copy = test;
   // for(int i = 0; i < copy.w*copy.channels; ++i) {
