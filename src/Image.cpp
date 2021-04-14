@@ -98,7 +98,7 @@ Image& Image::diffmap_scale(Image& img, uint8_t scl) {
   for (uint32_t i = 0; i < compare_width; ++i) {
 	for (uint32_t j = 0; j < compare_height; ++j) {
 	  for (uint8_t k = 0; k < compare_channels; ++k) {
-		data[(i*w+j)*channels+k] = BYTE_BOUND(abs(data[(i*w+j)*channels+k] - img.data[(i*img.w+j)*img.channels+k]));	
+		data[(i*w+j)*channels+k] = BYTE_BOUND(abs(data[(i*w+j)*channels+k] - img.data[(i*img.w+j)*img.channels+k]));
 		largest = fmax(largest, data[(i*w+j)*channels+k]);
 	  }
 	}
