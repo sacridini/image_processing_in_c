@@ -72,6 +72,10 @@ ImageType Image::getFileType(const char* filename) {
  return PNG;
 }
 
+Image& Image::std_convolve_clamp_to_0(uint8_t channel, uint32_t ker_w, uint32_t ker_h, double[] ker, uint32_t cr, uint32_t cc) {
+  
+}
+
 Image& Image::diffmap(Image& img) {
   int compare_width = fmin(w, img.w);
   int compare_height = fmin(h, img.h);
